@@ -17,16 +17,7 @@ None.
 
 ## Extension Settings
 
-TODO: contributes
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+* `extension.surroundWithTag` (Command): Prompt surrounding with tag (Keybind: `Ctrl + I`)
 
 ## Known Issues
 
@@ -40,7 +31,11 @@ Please open an issue on github if you encounter any trouble or have feedback, su
 
 ## Roadmap
 
-TODO: roadmap
+Some of the following ideas might eventually be implemented:
+* Extensive testing
+* Multi Select support
+* Options, where caret should end
+* Emmet abbreviation support
 
 ## Release Notes
 
