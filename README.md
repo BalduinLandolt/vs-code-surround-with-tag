@@ -32,6 +32,7 @@ Please open an issue on github if you encounter any trouble or have feedback, su
 ## Roadmap
 
 Some of the following ideas might eventually be implemented:
+* nice image
 * Extensive testing
 * Multi Select support
 * Options, where caret should end
