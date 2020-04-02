@@ -1,71 +1,73 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { window, Selection } from 'vscode';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	//console.log('Congratulations, your extension "surround-with-tag" is now active!');
-	
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('extension.surroundWithTag', async () => {
-		// The code you place here will be executed every time your command is executed
+    let disposable = vscode.commands.registerCommand('extension.surroundWithTag', async () => {
 
-		
+        // check if editor is open
+        let editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            console.log('No text editor open. Aborting.');
+            return; // No open text editor
+        }
 
-		let editor = vscode.window.activeTextEditor;
-		if (!editor) {
-			console.log('No text editor open. Aborting.');
-			return; // No open text editor
-		}
+        // QUESTION: Maybe check what file type it is? should only work in .html and .xml/.xsd/.xslt
+        // or do I leave that up to the user to decide?
 
-		let tagName = (await window.showInputBox({
-			placeHolder: 'Tag Name or Emmet Abbreviation'
-		})) as string;
+        // let user enter tag name in input box
+        let tagName = (await window.showInputBox({
+            placeHolder: 'Tag Name or Emmet Abbreviation'
+        })) as string;
 
-		if (!tagName){
-			console.log('No tag name entered. Aborting.');
-			return; // No tag name
-		}
+        // handle nothing entered
+        if (!tagName) {
+            console.log('No tag name entered. Aborting.');
+            return; // No tag name
+        }
 
-		// TODO: handle Emmet abbreviation input
+        // TODO: handle Emmet abbreviation input
 
-		let prefix = '<' + tagName + '>';
-		let postfix = '</' + tagName + '>';
+        // opening and closing tag
+        let prefix = '<' + tagName + '>';
+        let postfix = '</' + tagName + '>';
 
-		let original_selection = editor.selection;
+        let original_selection = editor.selection;
 
-		// TODO: handle empty selection
+        // TODO: handle empty selection
+        // QUESTION: how do I want this? should it abort? or add empty tag instead? or have caret between opening and closing tag?
 
-		editor
-        .edit(builder => {
-          let postfixPos = original_selection.end;
-          let prefixPos = original_selection.start;
-          builder.insert(prefixPos, prefix);
-		  builder.insert(postfixPos, postfix);
-		  console.log('prefix pos: '+prefixPos);
-        })
-         .then(function() {
-			let offset = tagName.length + 1;
-			let newPos = new vscode.Position(
-				original_selection.start.line,
-				original_selection.start.character + offset
-				);
-			editor!.selection = new Selection(
-				newPos,
-				newPos
-			);
-        });
-	});
+        editor
+            .edit(builder => {
+                // get previous positions
+                let postfixPos = original_selection.end;
+                let prefixPos = original_selection.start;
 
-	context.subscriptions.push(disposable);
+                // insert tags
+                builder.insert(prefixPos, prefix);
+                builder.insert(postfixPos, postfix);
+            })
+            .then(function () {
+                // reposition caret
+                let offset = tagName.length + 1;
+                // new position: in opening tag, after tag name, before the closing bracket (where the attributes go)
+                // QUESTION: is this how I want it?
+                // Alternatively it could multi-select opening and closing tag, or set caret after closing tag or so
+                let newPos = new vscode.Position(
+                    original_selection.start.line,
+                    original_selection.start.character + offset
+                );
+                // apply this selection to editor
+                editor!.selection = new Selection(
+                    newPos,
+                    newPos
+                );
+            });
+            // LATER: Handle multi-selections
+    });
+
+    context.subscriptions.push(disposable);
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }
