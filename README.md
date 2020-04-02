@@ -39,6 +39,6 @@ Some of the following ideas might eventually be implemented:
 
 ## Release Notes
 
-### 0.1.0 (upcoming)
+### 0.1.0
 
-Initial release. Covers basic functionality. (Upcoming...)
+Initial release. Covers basic functionality.
