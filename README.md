@@ -17,6 +17,8 @@ None.
 
 ## Extension Settings
 
+TODO: contributes
+
 Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
 
 For example:
@@ -28,22 +30,20 @@ This extension contributes the following settings:
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+None so far.
+
+Not all features are implemented, though. (See Roadmap below.)
+
+The Extension has been tested under Windows 10. Any feedback on how it runs under Linux/MacOS is appreciated.
+
+Please open an issue on github if you encounter any trouble or have feedback, suggestions or anything of that sort.
+
+## Roadmap
+
+TODO: roadmap
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+### 0.1.0 (upcoming)
 
-### 0.1.0
-
-Initial release. Covers basic functionality.
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
-
+Initial release. Covers basic functionality. (Upcoming...)
