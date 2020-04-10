@@ -1,5 +1,8 @@
 import * as vscode from 'vscode';
 import { window, Selection } from 'vscode';
+import { isAbbreviationValid } from 'vscode-emmet-helper';
+import expand from 'emmet';
+//import from '@emmetio/'
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -16,17 +19,40 @@ export function activate(context: vscode.ExtensionContext) {
         // or do I leave that up to the user to decide?
 
         // let user enter tag name in input box
-        let tagName = (await window.showInputBox({
+        let input = (await window.showInputBox({
             placeHolder: 'Tag Name or Emmet Abbreviation'
         })) as string;
 
         // handle nothing entered
-        if (!tagName) {
+        if (!input) {
             console.log('No tag name entered. Aborting.');
             return; // No tag name
         }
 
         // TODO: handle Emmet abbreviation input
+
+        // TODO: actually check, if input is emmet
+        
+        let isEmmet = true;
+
+        if (isEmmet){
+            console.log(`input: ${input}`);
+            
+            console.log(`expansion: ${expand(input)}`);
+
+            console.log(`valid: ${isAbbreviationValid('html', input)}`);
+            
+            /* 
+            TODO: something along these lines: if it contains a typical emmet character
+            (e.g. ">", "+", etc. - see https://docs.emmet.io/abbreviations/syntax/)
+            and it is a valid abbreviation, then it's interpreted as one.
+            Otherwise it's interpreted as just a tag name.
+            */
+        }
+
+
+
+        let tagName = input;
 
         // opening and closing tag
         let prefix = '<' + tagName + '>';

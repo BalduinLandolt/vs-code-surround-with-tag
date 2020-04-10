@@ -51,6 +51,10 @@
         "glob": "^7.1.6",
         "mocha": "^7.0.1",
         "typescript": "^3.7.5",
-        "vscode-test": "^1.3.0"
+        "vscode-emmet-helper": "1.2.17",
+        "vscode-test": "^1.3.0",
+        "emmet": "2.0.0-rc.13",
+        "@emmetio/abbreviation": "2.0.0-rc.8",
+        "@emmetio/css-abbreviation": "2.0.0-rc.6"
     }
 }
