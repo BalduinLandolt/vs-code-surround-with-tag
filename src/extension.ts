@@ -5,7 +5,9 @@ import { window, Selection } from 'vscode';
 
 export function activate(context: vscode.ExtensionContext) {
 
-    const disposable = vscode.commands.registerCommand('extension.surroundWithTag', async () => {
+    const commandName = 'extension.surroundWithTag';
+
+    const disposable = vscode.commands.registerCommand(commandName, async () => {
 
         // check if editor is open
         const editor = vscode.window.activeTextEditor;
@@ -19,7 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
 
         // let user enter tag name in input box
         const tagName = (await window.showInputBox({
-            placeHolder: 'Tag Name or Emmet Abbreviation'
+            placeHolder: 'Tag Name or Emmet Abbreviation (Emmet not yet implemented)'
         })) as string;
 
         // handle nothing entered
@@ -35,19 +37,19 @@ export function activate(context: vscode.ExtensionContext) {
         const postfix = '</' + tagName + '>';
 
         const original_selection = editor.selection;
+        const selectedText = editor.document.getText(editor.selection);
+        console.log(original_selection);
+        // TODO: handle multi selection
+
+
+        const replacement = prefix + selectedText + postfix;
 
         // TODO: handle empty selection
         // QUESTION: how do I want this? should it abort? or add empty tag instead? or have caret between opening and closing tag?
 
         editor
             .edit(builder => {
-                // get previous positions
-                const postfixPos = original_selection.end;
-                const prefixPos = original_selection.start;
-
-                // insert tags
-                builder.insert(prefixPos, prefix);
-                builder.insert(postfixPos, postfix);
+                builder.replace(original_selection, replacement);
             })
             .then(function () {
                 // reposition caret
