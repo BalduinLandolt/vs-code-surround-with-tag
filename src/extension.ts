@@ -1,12 +1,16 @@
+'use strict';
+
 import * as vscode from 'vscode';
 import { window, Selection } from 'vscode';
 
 export function activate(context: vscode.ExtensionContext) {
 
-    let disposable = vscode.commands.registerCommand('extension.surroundWithTag', async () => {
+    const commandName = 'extension.surroundWithTag';
+
+    const disposable = vscode.commands.registerCommand(commandName, async () => {
 
         // check if editor is open
-        let editor = vscode.window.activeTextEditor;
+        const editor = vscode.window.activeTextEditor;
         if (!editor) {
             console.log('No text editor open. Aborting.');
             return; // No open text editor
@@ -16,8 +20,8 @@ export function activate(context: vscode.ExtensionContext) {
         // or do I leave that up to the user to decide?
 
         // let user enter tag name in input box
-        let tagName = (await window.showInputBox({
-            placeHolder: 'Tag Name or Emmet Abbreviation'
+        const tagName = (await window.showInputBox({
+            placeHolder: 'Tag Name or Emmet Abbreviation (Emmet not yet implemented)'
         })) as string;
 
         // handle nothing entered
@@ -29,31 +33,30 @@ export function activate(context: vscode.ExtensionContext) {
         // TODO: handle Emmet abbreviation input
 
         // opening and closing tag
-        let prefix = '<' + tagName + '>';
-        let postfix = '</' + tagName + '>';
+        const prefix = '<' + tagName + '>';
+        const postfix = '</' + tagName + '>';
 
-        let original_selection = editor.selection;
+        const original_selection = editor.selection;
+        const selectedText = editor.document.getText(editor.selection);
+        // TODO: handle multi selection
+
+
+        const replacement = prefix + selectedText + postfix;
 
         // TODO: handle empty selection
         // QUESTION: how do I want this? should it abort? or add empty tag instead? or have caret between opening and closing tag?
 
         editor
             .edit(builder => {
-                // get previous positions
-                let postfixPos = original_selection.end;
-                let prefixPos = original_selection.start;
-
-                // insert tags
-                builder.insert(prefixPos, prefix);
-                builder.insert(postfixPos, postfix);
+                builder.replace(original_selection, replacement);
             })
             .then(function () {
                 // reposition caret
-                let offset = tagName.length + 1;
+                const offset = tagName.length + 1;
                 // new position: in opening tag, after tag name, before the closing bracket (where the attributes go)
                 // QUESTION: is this how I want it?
                 // Alternatively it could multi-select opening and closing tag, or set caret after closing tag or so
-                let newPos = new vscode.Position(
+                const newPos = new vscode.Position(
                     original_selection.start.line,
                     original_selection.start.character + offset
                 );
@@ -63,11 +66,8 @@ export function activate(context: vscode.ExtensionContext) {
                     newPos
                 );
             });
-            // LATER: Handle multi-selections
+        // LATER: Handle multi-selections
     });
 
     context.subscriptions.push(disposable);
 }
-
-// this method is called when your extension is deactivated
-export function deactivate() { }
