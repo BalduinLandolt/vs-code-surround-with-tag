@@ -5,6 +5,7 @@ import { window, Selection } from 'vscode';
 import * as emmet from 'emmet';
 import * as vscemmet from '@vscode/emmet-helper';
 import { AbbreviationNode, Abbreviation } from '@emmetio/abbreviation';
+import * as os from 'os';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -34,11 +35,21 @@ export function activate(context: vscode.ExtensionContext) {
         }
 
         let replacement: string;
+        let cursorPosition: vscode.Position;
 
         // check if input is emmet or literal
         const re = /^\w+$/;
         if (re.test(input)) {
             replacement = handleLiteral(input, editor);
+
+            const offset = input.length + 1;
+            // new position: in opening tag, after tag name, before the closing bracket (where the attributes go)
+            // QUESTION: is this how I want it?
+            // Alternatively it could multi-select opening and closing tag, or set caret after closing tag or so
+            cursorPosition = new vscode.Position(
+                editor.selection.start.line,
+                editor.selection.start.character + offset
+            );
         } else {
             if (!vscemmet.isAbbreviationValid('markup', input)) {
                 // obviousely invalid emmet
@@ -52,28 +63,24 @@ export function activate(context: vscode.ExtensionContext) {
                 return;
             }
             replacement = e;
+            const lines = e.split('\n');
+            const deltaLines = lines.length - 1;
+            const deltaChars = lines[lines.length - 1].length;
+            cursorPosition = editor.selection.start.translate(deltaLines, deltaChars);
         }
 
         // QUESTION: how do I want empty selection? should it abort? or add empty tag instead? or have caret between opening and closing tag?
 
         editor
             .edit(builder => {
+                // replace text
                 builder.replace(editor.selection, replacement);
             })
             .then(function () {
                 // reposition caret
-                const offset = input.length + 1;
-                // new position: in opening tag, after tag name, before the closing bracket (where the attributes go)
-                // QUESTION: is this how I want it?
-                // Alternatively it could multi-select opening and closing tag, or set caret after closing tag or so
-                const newPos = new vscode.Position(
-                    editor.selection.start.line,
-                    editor.selection.start.character + offset
-                );
-                // apply this selection to editor
                 editor!.selection = new Selection(
-                    newPos,
-                    newPos
+                    cursorPosition,
+                    cursorPosition
                 );
             });
         // LATER: Handle multi-selections
@@ -100,6 +107,7 @@ function handleEmmet(input: string, editor: vscode.TextEditor): string | Error {
         // parse emmet
         const config = emmet.resolveConfig(undefined);
         // TODO: only remove snippets, if not HTML!
+        // TODO: get indentation right
         config.snippets = {};
         const em = emmet.parseMarkup(input, config);
 
