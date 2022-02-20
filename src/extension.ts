@@ -56,7 +56,7 @@ export function activate(context: vscode.ExtensionContext) {
                 console.log('Invalid emmet abbreviation provided. Aborting.');
                 return;
             }
-            const e = handleEmmet(input, editor);
+            const e = handleEmmet(input, editor, editor.selection.start.character);
             if (e instanceof Error) {
                 // not so obviousely invalid emmet
                 console.log('Invalid emmet abbreviation provided. Aborting.');
@@ -100,15 +100,16 @@ function handleLiteral(input: string, editor: vscode.TextEditor): string {
     return prefix + selectedText + postfix;
 }
 
-function handleEmmet(input: string, editor: vscode.TextEditor): string | Error {
+function handleEmmet(input: string, editor: vscode.TextEditor, indent: number): string | Error {
     console.log("handling emmet");
     console.log('input: ', input);
     try {
         // parse emmet
         const config = emmet.resolveConfig(undefined);
         // TODO: only remove snippets, if not HTML!
-        // TODO: get indentation right
         config.snippets = {};
+        config.options['output.indent'] = '    ';
+        config.options['output.baseIndent'] = ' '.repeat(indent);
         const em = emmet.parseMarkup(input, config);
 
         // insert text to all leaf nodes
