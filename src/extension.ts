@@ -38,7 +38,6 @@ export function activate(context: vscode.ExtensionContext) {
 
         const original_selection = editor.selection;
         const selectedText = editor.document.getText(editor.selection);
-        console.log(original_selection);
         // TODO: handle multi selection
 
 
