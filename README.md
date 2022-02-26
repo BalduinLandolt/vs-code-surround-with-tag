@@ -10,6 +10,26 @@ First, select some text in the editor. Then in the Command Palette (`Ctrl + Shif
 
 ![demo](images/demo_01.gif)
 
+The extension also supports basic [Emmet abbreviations](https://docs.emmet.io/abbreviations/). Given an XML file:
+
+```XML
+<xml>
+    foo
+</xml>
+```
+
+If `foo` is selected and the `Surround with Tag` command is executed with the following imput: `b>ar*3`. The following output will be generated:
+
+```XML
+<xml>
+    <b>
+        <ar>foo</ar>
+        <ar>foo</ar>
+        <ar>foo</ar>
+    </b>
+</xml>
+```
+
 
 ## Requirements
 
@@ -23,9 +43,7 @@ None.
 
 None so far.
 
-Not all features are implemented, though. (See Roadmap below.)
-
-The Extension has been tested under Windows 10. Any feedback on how it runs under Linux/MacOS is appreciated.
+The Extension has been tested under Windows 10/11. Any feedback on how it runs under Linux/MacOS is appreciated.
 
 Please open an issue on github if you encounter any trouble or have feedback, suggestions or anything of that sort.
 
@@ -36,10 +54,7 @@ Some of the following ideas might eventually be implemented:
 * Extensive testing
 * Multi Select support
 * Options, where caret should end
-* Emmet abbreviation support
 
 ## Release Notes
 
-### 0.1.0
-
-Initial release. Covers basic functionality.
+See [Changelog](CHANGELOG.md).
