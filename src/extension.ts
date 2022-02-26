@@ -2,10 +2,8 @@
 
 import * as vscode from 'vscode';
 import { window, Selection } from 'vscode';
-import * as emmet from 'emmet';
 import * as vscemmet from '@vscode/emmet-helper';
-import { AbbreviationNode, Abbreviation } from '@emmetio/abbreviation';
-import * as os from 'os';
+import { handleEmmet, handleLiteral, Error } from "./lib";
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -39,8 +37,10 @@ export function activate(context: vscode.ExtensionContext) {
 
         // check if input is emmet or literal
         const re = /^\w+$/;
+        const selectedText = editor.document.getText(editor.selection);
         if (re.test(input)) {
-            replacement = handleLiteral(input, editor);
+
+            replacement = handleLiteral(input, selectedText);
 
             const offset = input.length + 1;
             // new position: in opening tag, after tag name, before the closing bracket (where the attributes go)
@@ -56,7 +56,7 @@ export function activate(context: vscode.ExtensionContext) {
                 console.log('Invalid emmet abbreviation provided. Aborting.');
                 return;
             }
-            const e = handleEmmet(input, editor, editor.selection.start.character);
+            const e = handleEmmet(input, selectedText, editor.selection.start.character);
             if (e instanceof Error) {
                 // not so obviousely invalid emmet
                 console.log('Invalid emmet abbreviation provided. Aborting.');
@@ -87,56 +87,4 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     context.subscriptions.push(disposable);
-}
-
-function handleLiteral(input: string, editor: vscode.TextEditor): string {
-    // opening and closing tag
-    const prefix = '<' + input + '>';
-    const postfix = '</' + input + '>';
-
-    const selectedText = editor.document.getText(editor.selection);
-    // TODO: handle multi selection
-
-    return prefix + selectedText + postfix;
-}
-
-function handleEmmet(input: string, editor: vscode.TextEditor, indent: number): string | Error {
-    console.log("handling emmet");
-    console.log('input: ', input);
-    try {
-        // parse emmet
-        const config = emmet.resolveConfig(undefined);
-        // TODO: only remove snippets, if not HTML!
-        config.snippets = {};
-        config.options['output.indent'] = '    ';
-        config.options['output.baseIndent'] = ' '.repeat(indent);
-        const em = emmet.parseMarkup(input, config);
-
-        // insert text to all leaf nodes
-        const selectedText = editor.document.getText(editor.selection);
-        em.children.forEach((c) => { traverseEmmet(c, selectedText); });
-        const emString = emmet.stringifyMarkup(em, config);
-        console.log(emString);
-        return emString;
-    } catch (error: any) {
-        console.log(`Error parsing emmet abbreviation "${input}": ${error}`);
-        return new Error(error);
-    }
-    // TODO: handle multi selection
-}
-
-function traverseEmmet(node: AbbreviationNode, value: string): void {
-    if (node.children && node.children.length >= 1) {
-        node.children.forEach((c) => { traverseEmmet(c, value); });
-    } else {
-        node.value = [value];
-    }
-}
-
-class Error {
-    e: any;
-
-    constructor(e: any) {
-        this.e = e;
-    }
 }
