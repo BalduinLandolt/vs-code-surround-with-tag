@@ -27,6 +27,6 @@
 - set up Github CI.
 
 
-## Initial Release
+## [0.1.0 - Initial Release] - 2020-04-03
 
 - core funtionality.
