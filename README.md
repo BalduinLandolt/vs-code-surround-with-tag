@@ -18,7 +18,7 @@ The extension also supports basic [Emmet abbreviations](https://docs.emmet.io/ab
 </xml>
 ```
 
-If `foo` is selected and the `Surround with Tag` command is executed with the following imput: `b>ar*3`. The following output will be generated:
+If `foo` is selected and the `Surround with Tag` command is executed with the following input: `b>ar*3`. The following output will be generated:
 
 ```XML
 <xml>
@@ -29,6 +29,9 @@ If `foo` is selected and the `Surround with Tag` command is executed with the fo
     </b>
 </xml>
 ```
+
+The extension supports multi-selections.
+Note however that a combination of multi-selection and emmet abbreviations may end up with unexpected results.
 
 
 ## Requirements
@@ -49,11 +52,10 @@ Please open an issue on github if you encounter any trouble or have feedback, su
 
 ## Roadmap
 
-Some of the following ideas might eventually be implemented:
-* nice image
-* Extensive testing
-* Multi Select support
-* Options, where caret should end
+The extension is currently considered feature complete.
+
+Additional features can be requested as ([GitHub issues](https://github.com/BalduinLandolt/vs-code-surround-with-tag/issues)).
+If they seem useful and I have time, I will gladly implement them.
 
 ## Release Notes
 

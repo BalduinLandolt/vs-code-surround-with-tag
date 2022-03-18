@@ -40,13 +40,8 @@ export function activate(context: vscode.ExtensionContext) {
             if (!replacement || !newSelection) {
                 return;
             }
-            console.log(replacement, newSelection);
             return new Replacement(replacement, selection, newSelection);
         }).filter((r): r is Replacement => !!r);
-
-
-        console.log(replacements);
-
 
         // apply the replacements
         editor.edit(builder => {
@@ -55,6 +50,7 @@ export function activate(context: vscode.ExtensionContext) {
                 builder.replace(r.previousSelection, r.replacement);
             });
         }).then(() => {
+            // place the carrets
             const newSelections = replacements.map(r => r.newSelection);
             editor.selections = newSelections;
         });
