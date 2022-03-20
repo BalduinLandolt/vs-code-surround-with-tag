@@ -2,12 +2,13 @@
     "publisher": "BalduinLandolt",
     "name": "surround-with-tag",
     "displayName": "Surround with Tag",
-    "description": "Surround selection with XML/HTML tag",
+    "description": "Surround selection with XML/HTML tag. Wrap a tag around the current selection.",
     "repository": {
         "type": "git",
         "url": "https://github.com/BalduinLandolt/vs-code-surround-with-tag.git"
     },
-    "version": "0.1.0",
+    "version": "1.0.0",
+    "icon": "images/icon.png",
     "engines": {
         "vscode": "^1.43.0"
     },
@@ -15,7 +16,9 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:extension.surroundWithTag"
+        "onCommand:extension.surroundWithTag",
+        "onLanguage:xml",
+        "onLanguage:html"
     ],
     "main": "./out/extension.js",
     "contributes": {
@@ -28,7 +31,8 @@
         "keybindings": [
             {
                 "command": "extension.surroundWithTag",
-                "key": "ctrl+i"
+                "key": "ctrl+i",
+                "mac": "cmd+i"
             }
         ]
     },
