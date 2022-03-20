@@ -7,6 +7,7 @@
 ### Added
 
 - support for emmet abbreviations.
+- support for multi-selection.
 
 
 ### Fixed
