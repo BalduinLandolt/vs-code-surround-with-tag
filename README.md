@@ -6,7 +6,7 @@ VS Code Extension "surround-with-tag"
 
 This Extension provides simple functionality to surround any activated text/elements with a HTML/XML tag.
 
-First, select some text in the editor. Then in the Command Palette (`Ctrl + Shift + P`), type "Surround with Tag" - or simply hit `Ctrl + I`. This will prompt a window, where you can type in the tag name. The opening and closing tags get inserted before and after the initial text selection.
+First, select some text in the editor. Then in the Command Palette (`Ctrl + Shift + P`), type "Surround with Tag" - or simply hit `Ctrl + I`/`Cmd + I`. This will prompt a window, where you can type in the tag name. The opening and closing tags get inserted before and after the initial text selection.
 
 ![demo](images/demo_01.gif)
 
@@ -30,13 +30,14 @@ If `foo` is selected and the `Surround with Tag` command is executed with the fo
 </xml>
 ```
 
+![emmet-demo](images/demo_02.gif)
+
 The extension supports multi-selections.
+
+![multiselect-demo](images/demo_03.gif)
+
 Note however that a combination of multi-selection and emmet abbreviations may end up with unexpected results.
 
-
-## Requirements
-
-None.
 
 ## Extension Settings
 
@@ -46,9 +47,9 @@ None.
 
 None so far.
 
-The Extension has been tested under Windows 10/11. Any feedback on how it runs under Linux/MacOS is appreciated.
+The Extension has been tested under Windows 10/11 and MacOS.
 
-Please open an issue on github if you encounter any trouble or have feedback, suggestions or anything of that sort.
+Please open an issue on github if you encounter any problems.
 
 ## Roadmap
 

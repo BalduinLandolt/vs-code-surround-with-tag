@@ -4,6 +4,8 @@
 ## [Unreleased]
 
 
+## [1-0-0] - 2022-03-20
+
 ### Added
 
 - support for emmet abbreviations.
@@ -18,6 +20,7 @@
 ### Documentation
 
 - add changelog file.
+- add release news file.
 - update readme file.
 
 
