@@ -4,10 +4,14 @@ import * as vscode from 'vscode';
 import { window, Selection } from 'vscode';
 import * as vscemmet from '@vscode/emmet-helper';
 import { handleEmmet, handleLiteral, Error } from "./lib";
+import path = require('path');
 
 export function activate(context: vscode.ExtensionContext) {
 
     const commandName = 'extension.surroundWithTag';
+
+    // show news if a new release has been published but the user not yet informed
+    checkIfShowNews(context);
 
     const disposable = vscode.commands.registerCommand(commandName, async () => {
 
@@ -98,6 +102,34 @@ function getReplacement(editor: vscode.TextEditor, input: string, selectedText: 
         const newSelection = new Selection(cursorPosition, cursorPosition);
         return [replacement, newSelection];
     }
+}
+
+async function checkIfShowNews(context: vscode.ExtensionContext) {
+    const lastVersion: string | undefined = context.globalState.get('lastNewsVersion');
+    const currentVersion: string = context.extension.packageJSON.version;
+
+    if (lastVersion === undefined || versionIsSmaller(lastVersion, currentVersion)) {
+        context.globalState.update('lastNewsVersion', currentVersion);
+        showNews(context);
+    }
+}
+
+function versionIsSmaller(last: string, current: string): boolean {
+    const l_versions = last.split('.');
+    const c_versions = current.split('.');
+    const pairs = l_versions.map((l, i) => {
+        return [Number(l), Number(c_versions[i])];
+    });
+    pairs.forEach((p) => {
+        if (p[0] < p[1]) return true;
+    });
+    return false;
+}
+
+function showNews(context: vscode.ExtensionContext) {
+    const filepath = path.join(context.extensionPath, 'news.md');
+    console.log(filepath);
+    vscode.commands.executeCommand('markdown.showPreview', vscode.Uri.file(filepath));
 }
 
 class Replacement {
