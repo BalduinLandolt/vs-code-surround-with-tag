@@ -97,7 +97,7 @@ function getReplacement(editor: vscode.TextEditor, input: string, selectedText: 
         const replacement = e;
         const lines = e.split('\n');
         const deltaLines = lines.length - 1;
-        const deltaChars = lines[lines.length - 1].length;
+        const deltaChars = lines[lines.length - 1].length - editor.selection.start.character;
         const cursorPosition = editor.selection.start.translate(deltaLines, deltaChars);
         const newSelection = new Selection(cursorPosition, cursorPosition);
         return [replacement, newSelection];
